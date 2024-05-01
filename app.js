@@ -29,8 +29,8 @@ app.get('/registration', (req, res) => {
 
 app.get('/map', (req, res) => {
     res.render('map', {
-        yandexStaticApi: process.env.YANDEX_STATIC_API_KEY,
-        yandexSuggestApi: process.env.YANDEX_SUGGEST_API_KEY
+        YANDEX_STATIC_API_KEY: process.env.YANDEX_STATIC_API_KEY,
+        YANDEX_SUGGEST_API_KEY: process.env.YANDEX_SUGGEST_API_KEY
     });
 });
 

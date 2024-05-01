@@ -1,109 +1,206 @@
 ymaps.ready(init);
-function init(){
-    let myMap = new ymaps.Map("map", {
-        center: [48.480205, 135.071913], // Координаты центра карты
+
+function init() {
+    let myMap = new ymaps.Map('map', {
+        center: [48.480205, 135.071913],
         zoom: 15,
-        controls: []
-    });
+        controls: [],
+    })
 
-    // Создадим элемент управления "Пробки".
-    let trafficControl = new ymaps.control.TrafficControl({ state: {
-            // Отображаются пробки "Сейчас".
-            providerKey: 'traffic#actual',
-            // Начинаем сразу показывать пробки на карте.
-            trafficShown: false
-        }});
-    // Добавим контрол на карту.
-    myMap.controls.add(trafficControl);
-    // Получим ссылку на провайдер пробок "Сейчас" и включим показ инфоточек.
-    trafficControl.getProvider('traffic#actual').state.set('infoLayerShown', true);
+    document.querySelector('ymaps').style.borderRadius = '20px'; // не оч вариант
+    document.querySelector('ymaps').style.overflow = 'hidden'; // не оч вариант
 
-    let suggestBounds = [
-        [48.316666, 134.892578], // Юго-западный угол области Хабаровска
-        [48.633333, 135.186767]  // Северо-восточный угол области Хабаровска
+    let startPlacemark;
+    let endPlacemark;
+    let currentRoute;
+
+    clearAllControls();
+
+    // Границы ХБК
+    let boundsKHV = [
+        [48.316666, 134.892578],
+        [48.633333, 135.186767]
     ];
 
-    let suggestOptions = {
-        boundedBy: suggestBounds,  // Ограничение области поиска
-        strictBounds: true,        // Не показывать результаты вне ограниченной области
-        provider: {
-            searchCoordOrder: "latlong"
-        }
-    };
-
-    let suggestStart = new ymaps.SuggestView('startPoint');
-    let suggestEnd = new ymaps.SuggestView('endPoint');
-
-    document.getElementById('startPoint').addEventListener('input', function() {
-        geocode(this.value, 'start');
+    // Выпадающий список для адресов
+    let suggestViewPointStart = new ymaps.SuggestView('startPoint', {
+        results: 2,
+        boundedBy: boundsKHV,
     });
 
-    document.getElementById('endPoint').addEventListener('input', function() {
-        geocode(this.value, 'end');
+    let suggestViewPointEnd = new ymaps.SuggestView('endPoint', {
+        results: 2,
+        boundedBy: boundsKHV,
     });
 
-    function geocode(address, type) {
-        ymaps.geocode(address).then(function(res) {
-            let obj = res.geoObjects.get(0);
-            if (obj) {
-                showResult(obj, type);
-            } else {
-                showError("Адрес не найден", type);
+
+    // Обраюотчик catch
+    // document.querySelector('#startPoint').addEventListener('change', function (e) {
+    //     geocode(document.querySelector('#startPoint').value, true).then(function(coords) {
+    //         console.log("Координаты (н):", coords);
+    //         // startPoint = [...coords];
+    //     }).catch(function(error) {
+    //         console.error("Произошла ошибка при геокодировании:", error);
+    //     })
+    // });
+
+    document.querySelector('#startPoint').addEventListener('blur', function (e) {
+        setTimeout(() => {
+                geocode(document.querySelector('#startPoint').value, true);
+        }, 300);
+    });
+
+    document.querySelector('#endPoint').addEventListener('blur', function (e) {
+        setTimeout(() => {
+                geocode(document.querySelector('#endPoint').value, false);
+        }, 300);
+    });
+
+    document.querySelector('#route').addEventListener('click', function (e) {
+        console.log('click');
+        route();
+    });
+
+    document.querySelector('#removeControls').addEventListener('click', function (e) {
+        clearAllControls();
+    });
+
+    document.querySelector('#check').addEventListener('click', function (e) {
+        console.log(startPlacemark);
+        console.log(endPlacemark);
+    });
+
+    function route() {
+        removeRouteOnMap();
+
+        ymaps.route([
+            startPlacemark._geoObjectComponent._geometry._coordinates,
+            endPlacemark._geoObjectComponent._geometry._coordinates
+        ] , {
+            reverseGeocoding: true,
+            routingMode: 'auto',
+            boundedBy: boundsKHV,
+            mapStateAutoApply: true,
+        }).done(function (route) {
+            currentRoute = route;
+            route.options.set("mapStateAutoApply", true);
+            myMap.geoObjects.add(route);
+            document.querySelector('#duration').innerText = getTimeRoute(route.getHumanTime());
+            document.querySelector('#distance').innerText = getDistanceRoute(route.getHumanLength());
+        }, function (err) {
+            throw err;
+        }, this);
+    }
+
+
+    function geocode(address, isStart) {
+        // Возвращаем промис напрямую из вызова ymaps.geocode
+        return ymaps.geocode(address, {
+            results: 1
+        }).then(function (res) {
+            // Выбор первого результата
+            let firstGeoObject = res.geoObjects.get(0);
+            let coords = firstGeoObject.geometry.getCoordinates(); // массив координат
+            let bounds = firstGeoObject.properties.get('boundedBy'); // границы объекта для центрирования карты
+
+            // Создание плейсмарка
+            newPlacemark = new ymaps.Placemark(coords, {
+                balloonContent: 'Адрес: ' + address,
+            }, {
+                preset: isStart ? 'islands#redDotIcon' : 'islands#blueDotIcon'
+            });
+
+            // Добавление метки на карту
+            myMap.geoObjects.add(newPlacemark);
+
+            // Удаление старой метки
+            if (isStart) {
+                if (startPlacemark) {
+                    myMap.geoObjects.remove(startPlacemark);
+                }
+                startPlacemark = newPlacemark;
             }
+            else if (!isStart) {
+                if (endPlacemark) {
+                    myMap.geoObjects.remove(endPlacemark);
+                }
+                endPlacemark = newPlacemark;
+            }
+
+            // Центрирование карты
+            myMap.setBounds(bounds, {
+                checkZoomRange: true
+            });
         });
     }
 
-    function showResult(obj, type) {
-        let mapContainer = $('#map'),
-            bounds = obj.properties.get('boundedBy'),
-            mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [mapContainer.width(), mapContainer.height()]),
-            address = obj.getAddressLine();
-
-        if (type === 'start') {
-            // Действия для начальной точки
-            createOrUpdatePlacemark(mapState, address, 'start');
-        } else {
-            // Действия для конечной точки
-            createOrUpdatePlacemark(mapState, address, 'end');
+    function removePlacemarkOnMap () {
+        if (startPlacemark) {
+            myMap.geoObjects.remove(startPlacemark);
         }
-
+        if  (endPlacemark) {
+            myMap.geoObjects.remove(endPlacemark);
+        }
     }
 
-    function showError(message, type) {
-        if (type === 'start') {
-            $('#startPoint').addClass('input_error');
-        } else {
-            $('#endPoint').addClass('input_error');
+    function removeRouteOnMap () {
+        if (currentRoute) {
+            myMap.geoObjects.remove(currentRoute);
         }
-        console.error(message);
     }
 
-    function createOrUpdatePlacemark(state, caption, type) {
-        if (type === 'start') {
-            if (!window.startPlacemark) {
-                window.startPlacemark = new ymaps.Placemark(state.center, {
-                    balloonContent: caption
-                }, {
-                    preset: 'islands#greenDotIconWithCaption'
-                });
-                myMap.geoObjects.add(window.startPlacemark);
+    function getTimeRoute (time) {
+        const minutes = parseInt(time);
+        let label = 'минут';
+        if (minutes % 10 === 1 && minutes % 100 !== 11) {
+            label = 'минута';
+        } else if ([2, 3, 4].includes(minutes % 10) && ![12, 13, 14].includes(minutes % 100)) {
+            label = 'минуты';
+        }
+
+        return `${minutes} ${label}`;
+    }
+
+    function getDistanceRoute(distance) {
+        const normalizedDistance = distance.replace(/&#160;/g, '\u00A0');
+        const parts = normalizedDistance.split('\u00A0');
+        const number = parseInt(parts[0], 10);
+        const unit = parts[1];
+
+        // Определяем правильное склонение
+        let label = '';
+
+        if (unit.startsWith('км')) { // Для километров
+            if (number % 10 === 1 && number % 100 !== 11) {
+                label = 'километр';
+            } else if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) {
+                label = 'километра';
             } else {
-                window.startPlacemark.geometry.setCoordinates(state.center);
-                window.startPlacemark.properties.set('balloonContent', caption);
+                label = 'километров';
             }
-        } else {
-            if (!window.endPlacemark) {
-                window.endPlacemark = new ymaps.Placemark(state.center, {
-                    balloonContent: caption
-                }, {
-                    preset: 'islands#redDotIconWithCaption'
-                });
-                myMap.geoObjects.add(window.endPlacemark);
+        } else if (unit.startsWith('м')) { // Для метров
+            if (number % 10 === 1 && number % 100 !== 11) {
+                label = 'метр';
+            } else if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) {
+                label = 'метра';
             } else {
-                window.endPlacemark.geometry.setCoordinates(state.center);
-                window.endPlacemark.properties.set('balloonContent', caption);
+                label = 'метров';
             }
         }
-        myMap.setCenter(state.center, state.zoom);
+
+        return `${number} ${label}`;
+    }
+
+    function clearAllControls() {
+        removeRouteOnMap();
+        currentRoute = null;
+        removePlacemarkOnMap();
+        startPlacemark = null;
+        endPlacemark = null;
+        document.querySelector('#startPoint').value = '';
+        document.querySelector('#endPoint').value = '';
+        document.querySelector('#duration').innerText = '';
+        document.querySelector('#distance').innerText = '';
     }
 }
+
