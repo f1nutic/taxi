@@ -3,21 +3,32 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user', {
     id: {
       autoIncrement: true,
-      autoIncrementIdentity: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    login: {
-      type: DataTypes.STRING(10),
+    phone: {
+      type: DataTypes.STRING(11),
       allowNull: true
     },
-    pass: {
-      type: DataTypes.STRING(10),
+    name: {
+      type: DataTypes.STRING(30),
       allowNull: true
     },
-    hash_pass: {
-      type: DataTypes.STRING(100),
+    user_type: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'user_type',
+        key: 'id'
+      }
+    },
+    birthday: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    hashed_password: {
+      type: DataTypes.STRING(60),
       allowNull: true
     }
   }, {
