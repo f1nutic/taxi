@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>Авторизация</title>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen justify-between">
+<%- include('header') %>
+
+<div class="bg-purple-50 p-8 border-radius-20px w-1/4 self-center border-4 border-purple-600 shadow-xl">
+    <h1 class="text-4xl text-center font-bold mb-8">Авторизация</h1>
+    <form action="#" method="POST">
+        <div class="mb-4">
+            <label for="phone" class="block text-xl font-medium">Телефон</label>
+            <input type="tel" id="phone" name="phone" required pattern="^\+7[1-9]\d{9}$" title="Телефон должен начинаться с +7 и содержать 10 цифр после +7" class="text-lg mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <div class="mb-8">
+            <label for="password" class="block text-xl font-medium">Пароль</label>
+            <input type="password" id="password" name="password" required pattern="[\w!@#\$%\^&\*\(\)_\+]{6,}" title="text-lg Пароль должен быть не менее 6 символов и может включать цифры, буквы и спецсимволы" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <a href="/login" class="text-center block w-full bg-purple-600 border-4 border-purple-400  hover:bg-purple-700 text-white text-xl font-bold py-2 px-2 rounded-full transition duration-300">Войти</a>
+        <button type="submit" class="mt-2 w-full bg-purple-600 border-4 border-purple-400  hover:bg-purple-700 text-white text-xl font-bold py-2 px-2 rounded-full transition duration-300">Регистрация</button>
+
+    </form>
+</div>
+
+<%- include('footer') %>
+
+</body>
+</html>

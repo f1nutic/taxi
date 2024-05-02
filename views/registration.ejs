@@ -4,36 +4,37 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
     <title>Регистрация</title>
-
 </head>
-<body class="bg-gray-100 flex flex-col h-screen  justify-between ">
+<body class="bg-gray-100 flex flex-col h-screen justify-between">
 <%- include('header') %>
 
-<div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full self-center">
-    <h1 class="text-xl text-center font-bold mb-5">Регистрация</h1>
+<div class="bg-purple-50 p-8 border-radius-20px w-1/4 self-center border-4 border-purple-600 shadow-xl">
+    <h1 class="text-4xl text-center font-bold mb-8">Регистрация</h1>
     <form action="#" method="POST">
         <div class="mb-4">
-            <label for="name" class="block text-sd font-medium text-gray-700">Имя</label>
-            <input type="text" id="name" name="name" required pattern="[А-Яа-я]{2,50}" title="Имя должно содержать только русские буквы и быть от 2 до 50 символов" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <label for="name" class="block text-xl font-medium">Имя</label>
+            <input type="text" id="name" name="name" required pattern="[А-Яа-я]{2,50}" title="Имя должно содержать только русские буквы и быть от 2 до 50 символов" class="text-lg mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
         </div>
 
         <div class="mb-4">
-            <label for="phone" class="block text-sd font-medium text-gray-700">Телефон</label>
-            <input type="tel" id="phone" name="phone" placeholder="+79101234567" required pattern="^\+7[1-9]\d{9}$" title="Телефон должен начинаться с +7 и содержать 10 цифр после +7" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <label for="phone" class="block text-xl font-medium">Телефон</label>
+            <input type="tel" id="phone" name="phone" placeholder="+79101234567" required pattern="^\+7[1-9]\d{9}$" title="Телефон должен начинаться с +7 и содержать 10 цифр после +7" class="text-lg mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
         </div>
 
         <div class="mb-4">
-            <label for="birthdate" class="block text-sd font-medium text-gray-700">День рождения</label>
-            <input type="date" id="birthdate" name="birthdate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <label for="birthdate" class="block text-xl font-medium">День рождения</label>
+            <input type="date" id="birthdate" name="birthdate" required class="text-lg mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             <span id="birthdateHint" class="hidden text-sm text-red-500"></span>
         </div>
 
-        <div class="mb-6">
-            <label for="password" class="block text-sd font-medium text-gray-700">Пароль</label>
-            <input type="password" id="password" name="password" required pattern="[\w!@#\$%\^&\*\(\)_\+]{6,}" title="Пароль должен быть не менее 6 символов и может включать цифры, буквы и спецсимволы" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+        <div class="mb-8">
+            <label for="password" class="block text-xl font-medium">Пароль</label>
+            <input type="password" id="password" name="password" required pattern="[\w!@#\$%\^&\*\(\)_\+]{6,}" title="text-lg Пароль должен быть не менее 6 символов и может включать цифры, буквы и спецсимволы" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
         </div>
 
-        <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700 ">Зарегистрироваться</button>
+        <button type="submit" class="w-full bg-purple-600 border-4 border-purple-400  hover:bg-purple-700 text-white text-xl font-bold py-2 px-2 rounded-full transition duration-300">Зарегистрироваться</button>
+        <a href="/login" class="text-center block mt-2 w-full bg-purple-600 border-4 border-purple-400  hover:bg-purple-700 text-white text-xl font-bold py-2 px-2 rounded-full transition duration-300">Авторизация</a>
+
     </form>
 </div>
 

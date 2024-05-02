@@ -7,9 +7,6 @@ function init() {
         controls: [],
     })
 
-    // document.querySelector('ymaps').style.borderRadius = '20px'; // не оч вариант
-    // document.querySelector('ymaps').style.overflow = 'hidden'; // не оч вариант
-
     let startPlacemark;
     let endPlacemark;
     let currentRoute;
@@ -65,10 +62,6 @@ function init() {
         clearAllControls();
     });
 
-    document.querySelector('#check').addEventListener('click', function (e) {
-        console.log(startPlacemark);
-        console.log(endPlacemark);
-    });
 
     function route() {
         removeRouteOnMap();

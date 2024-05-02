@@ -24,8 +24,8 @@ app.get('/users/:id', userController.getUserById);
 app.put('/users/:id', userController.updateUser);
 app.delete('/users/:id', userController.deleteUser);
 
-app.get('/registration', (req, res) => {
-    res.render('registration');
+app.get('/about', (req, res) => {
+    res.render('about');
 });
 
 app.get('/map', (req, res) => {
@@ -35,9 +35,12 @@ app.get('/map', (req, res) => {
     });
 });
 
+app.get('/registration', (req, res) => {
+    res.render('registration');
+});
 
-app.post('/auth/login', (req, res) => {
-    // TO-DO
+app.get('/login', (req, res) => {
+    res.render('login');
 });
 
 app.listen(3000, (error) => {

@@ -5,55 +5,61 @@
 
 .ymaps-2-1-79-map ymaps, .ymaps-2-1-79-map ymaps::after, .ymaps-2-1-79-map ymaps::before {
     box-sizing: border-box;
+}
 
+.border-radius-20px {
+    border-radius: 20px;
 }
 
 .contents {
     display: contents;
 }
 
-.navbar_text {
+.navbar_text{
     font-size: 26px;
     color: #9d57fe;
+    transition: 0.3s;
 }
 
-.navbar_text a:hover {
+.navbar_text:hover {
     color: #f8a402;
 }
 
-.div_order {
-    /*background-color: #9d57fe;*/
-    background-color: #7837d5;
+
+.button_order_form {
+    border: solid 4px #c084fc;
+    background-color: #9333ea;
+    transition: 0.5s;
+    color: white;
 }
 
-/*ymaps {*/
-/*    border-radius: 20px;*/
-/*    !*border: solid 4px orange;*!*/
-
-/*    !*overflow: hidden;*!*/
-/*}*/
+.button_order_form:hover {
+    background-color: #FFA500;
+    border: solid 4px #FFD700;
+}
 
 .ymaps-2-1-79-map.ymaps-2-1-79-i-ua_js_yes.ymaps-2-1-79-map-bg.ymaps-2-1-79-islets_map-lang-ru {
     border-radius: 20px;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .ymaps-2-1-79-inner-panes, .ymaps-2-1-79-outer-panes {
     border-radius: 20px;
-    border: solid 4px orange;
+    border: solid 4px #9333ea;
 }
 
 .ymaps-2-1-79-search__suggest {
-    background-color: antiquewhite;
-    border: 4px solid orange;
-    top: -22px;
-    right: 1px;
+    background-color: #ffffff;
+    border: 4px solid #9333ea;
+    top: -5px;
+    right: -0px;
     left: 0px;
     border-radius: 0px 0px 10px 10px;
 
     font-family: inherit;
     font-feature-settings: inherit;
     font-variation-settings: inherit;
-    font-size: 90%;
+    font-size: 100%;
     font-weight: inherit;
     line-height: inherit;
     letter-spacing: inherit;
@@ -64,6 +70,45 @@
     margin-top: 4px;
 }
 
+.ymaps-2-1-79-search__suggest-item_selected_yes {
+    background-color: #f0eeff;
+}
+
 .border-orange-500 {
     border-color: orange;
+}
+
+.stack_tech{
+    font-size: 26px;
+}
+
+.stack_tech li{
+    transition: 0.5s;
+    margin-left: 40px;
+}
+
+.stack_tech li:hover{
+    color: #9333ea;
+}
+
+
+
+.icon-phone, .icon-github, .icon-yandex {
+    padding-left: 36px; /* Размер значка + немного дополнительного пространства */
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 28px; /* Предполагаемый размер значков */
+}
+
+.icon-phone {
+    background-image: url('img/phone32.png'); /* Путь к вашему значку телефона */
+}
+
+.icon-github {
+    background-image: url('img/github32.png'); /* Путь к вашему значку GitHub */
+    margin-left: -100px;
+}
+
+.icon-yandex {
+    background-image: url('img/yandex32.png'); /* Путь к вашему значку Yandex */
 }
