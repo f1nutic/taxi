@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Карта</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link  href="styles.css" rel="stylesheet">
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=<%=YANDEX_STATIC_API_KEY%>&suggest_apikey=<%=YANDEX_SUGGEST_API_KEY%>" type="text/javascript"></script>
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 </head>
 <body class="bg-gray-100 flex flex-col h-screen  justify-between ">
 <%- include('header') %>
 
-<div class="container mx-auto flex px-5 py-24">
+<div class="container mx-auto flex px-5 py-18">
     <div id="map" class="flex-auto w-3/5 " style="height: 700px;"></div>
-    <div class="flex-auto ml-4 space-y-4 bg-indigo-500 w-2/5" style="border-radius: 20px">
-        <p class="text-center py-6 text-5xl font-bold text-white" >Заказ</p>
-        <input type="text" id="startPoint" placeholder="Начальная точка" class="block mx-auto w-11/12 px-4 py-3  border-4 border-yellow-500 rounded-md text-xl focus:outline-none">
-        <input type="text" id="endPoint" placeholder="Конечная точка" class="block mx-auto w-11/12 px-4 py-3 border-4 border-yellow-500 rounded-md text-xl focus:outline-none">
+    <div class="flex-auto ml-4 space-y-4 div_order w-2/5 border-4 border-orange-500" style="border-radius: 20px">
+        <p class="text-center py-6 text-5xl font-bold ">Заказ</p>
+        <input type="text" id="startPoint" placeholder="Начальная точка" class="block mx-auto w-11/12 px-4 py-3  border-4 border-orange-500 rounded-md text-lg focus:outline-none">
+        <input type="text" id="endPoint" placeholder="Конечная точка" class="block mx-auto w-11/12 px-4 py-3 border-4 border-orange-500 rounded-md text-lg focus:outline-none">
         <div id="routeInfo" class="mx-12 text-xl text-white">
             <p>Время поездки: <span id="duration"></span></p>
             <p>Расстояние: <span id="distance"></span></p>
         </div>
         <div class="controls mx-5">
-            <button id="route" class="mx-auto bg-white rounded-full px-6 py-2 text-xl text-indigo-500 border-4 border-yellow-500">Заказать</button>
+            <button id="route" class="mx-auto bg-white rounded-full px-6 py-2 text-xl text-indigo-500 border-4 border-orange-500">Заказать</button>
             <button id="check" class="mx-auto bg-red-800 rounded-full">Чекнуть</button>
             <button id="removeControls" class="mx-auto bg-red-800 rounded-full">Очистить</button>
 

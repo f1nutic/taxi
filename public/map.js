@@ -7,8 +7,8 @@ function init() {
         controls: [],
     })
 
-    document.querySelector('ymaps').style.borderRadius = '20px'; // не оч вариант
-    document.querySelector('ymaps').style.overflow = 'hidden'; // не оч вариант
+    // document.querySelector('ymaps').style.borderRadius = '20px'; // не оч вариант
+    // document.querySelector('ymaps').style.overflow = 'hidden'; // не оч вариант
 
     let startPlacemark;
     let endPlacemark;
@@ -24,12 +24,12 @@ function init() {
 
     // Выпадающий список для адресов
     let suggestViewPointStart = new ymaps.SuggestView('startPoint', {
-        results: 2,
+        results: 3,
         boundedBy: boundsKHV,
     });
 
     let suggestViewPointEnd = new ymaps.SuggestView('endPoint', {
-        results: 2,
+        results: 3,
         boundedBy: boundsKHV,
     });
 

@@ -1,3 +1,69 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.ymaps-2-1-79-map ymaps, .ymaps-2-1-79-map ymaps::after, .ymaps-2-1-79-map ymaps::before {
+    box-sizing: border-box;
+
+}
+
+.contents {
+    display: contents;
+}
+
+.navbar_text {
+    font-size: 26px;
+    color: #9d57fe;
+}
+
+.navbar_text a:hover {
+    color: #f8a402;
+}
+
+.div_order {
+    /*background-color: #9d57fe;*/
+    background-color: #7837d5;
+}
+
+/*ymaps {*/
+/*    border-radius: 20px;*/
+/*    !*border: solid 4px orange;*!*/
+
+/*    !*overflow: hidden;*!*/
+/*}*/
+
+.ymaps-2-1-79-map.ymaps-2-1-79-i-ua_js_yes.ymaps-2-1-79-map-bg.ymaps-2-1-79-islets_map-lang-ru {
+    border-radius: 20px;
+}
+
+.ymaps-2-1-79-inner-panes, .ymaps-2-1-79-outer-panes {
+    border-radius: 20px;
+    border: solid 4px orange;
+}
+
+.ymaps-2-1-79-search__suggest {
+    background-color: antiquewhite;
+    border: 4px solid orange;
+    top: -22px;
+    right: 1px;
+    left: 0px;
+    border-radius: 0px 0px 10px 10px;
+
+    font-family: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    font-size: 90%;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+}
+
+.ymaps-2-1-79-search__suggest-item {
+    margin-top: 4px;
+}
+
+.border-orange-500 {
+    border-color: orange;
+}
