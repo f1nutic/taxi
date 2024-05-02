@@ -1,11 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const { Pool } = require('pg');
-const jwt = require('jsonwebtoken');
+// const { Pool } = require('pg');
+// const jwt = require('jsonwebtoken');
 const path = require('path');
-
-const userController = require('./controllers/userController');
 
 
 const app = express();
@@ -14,15 +12,25 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static('dist'));
 app.use(express.static('public'));
+// app.use(express.static('validations'));
+
+const userController = require('./controllers/userController');
+
+const userRoutes = require('./routes/userRoutes');
+app.use(userRoutes);
 
 
-app.post('/users', userController.createUser);
-app.get('/users', userController.getAllUsers);
-app.get('/users/:id', userController.getUserById);
-app.put('/users/:id', userController.updateUser);
-app.delete('/users/:id', userController.deleteUser);
+
+
+app.post('/user', userController.createUser);
+app.get('/user', userController.getAllUsers);
+app.get('/user/:id', userController.getUserById);
+app.put('/user/:id', userController.updateUser);
+app.delete('/user/:id', userController.deleteUser);
 
 app.get('/about', (req, res) => {
     res.render('about');

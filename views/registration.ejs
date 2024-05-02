@@ -10,7 +10,7 @@
 
 <div class="bg-purple-50 p-8 border-radius-20px w-1/4 self-center border-4 border-purple-600 shadow-xl">
     <h1 class="text-4xl text-center font-bold mb-8">Регистрация</h1>
-    <form action="#" method="POST">
+    <form action="/registration" method="POST">
         <div class="mb-4">
             <label for="name" class="block text-xl font-medium">Имя</label>
             <input type="text" id="name" name="name" required pattern="[А-Яа-я]{2,50}" title="Имя должно содержать только русские буквы и быть от 2 до 50 символов" class="text-lg mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
@@ -22,8 +22,8 @@
         </div>
 
         <div class="mb-4">
-            <label for="birthdate" class="block text-xl font-medium">День рождения</label>
-            <input type="date" id="birthdate" name="birthdate" required class="text-lg mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <label for="birthday" class="block text-xl font-medium">День рождения</label>
+            <input type="date" id="birthday" name="birthday" required class="text-lg mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             <span id="birthdateHint" class="hidden text-sm text-red-500"></span>
         </div>
 

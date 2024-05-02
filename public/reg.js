@@ -1,4 +1,4 @@
-document.getElementById('birthdate').addEventListener('change', function () {
+document.getElementById('birthday').addEventListener('change', function () {
     const dob = new Date(this.value);
     const today = new Date();
     let age = today.getFullYear() - dob.getFullYear();
