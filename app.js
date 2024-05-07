@@ -42,9 +42,14 @@ app.get('/user', userController.getAllUsers);
 app.get('/user/:id', userController.getUserById);
 app.put('/user/:id', userController.updateUser);
 app.delete('/user/:id', userController.deleteUser);
+app.get('/', (req, res) => {
+    res.redirect('/about');
+});
 
 app.get('/about', (req, res) => {
-    res.render('about', { user: req.user });
+    const userId = req.session.userId;
+    console.log(userId)
+    res.render('about', { user: userId });
 });
 
 app.get('/map', async (req, res) => {

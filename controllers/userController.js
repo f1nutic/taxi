@@ -2,39 +2,15 @@ const bcrypt = require('bcrypt');
 const { User } = require('../config/database');
 const moment = require('moment');
 
-// Создание нового пользователя
-exports.createUser = async (req, res) => {
-    // Получите данные из запроса
-    const { name, phone, birthday, password } = req.body;
 
-    const formattedPhone = phone.replace(/^\+/, '');
-
-    try {
-        // Хеширование пароля
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Создайте пользователя
-        const newUser = await User.create({
-            name,
-            phone: formattedPhone,
-            birthday,
-            user_type: 2,
-            hashed_password: hashedPassword,
-        });
-
-        res.status(201).json({ message: "Пользователь успешно зарегистрирован", user: newUser });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Внутренняя ошибка сервера' });
-    }
-};
 
 exports.loginUser = async (req, res) => {
-    const { phone, password } = req.body;
-
+    
+    let{phone, password}=req.body
     try {
         // Поиск пользователя по телефону
-        const user = await User.findOne({ where: { phone } });
+        phone=phone.slice(1);
+        user = await User.findOne({ where: { phone } });
         if (!user) {
             return res.status(401).json({ message: "Неправильный телефон " });
         }
