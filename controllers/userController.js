@@ -36,13 +36,13 @@ exports.loginUser = async (req, res) => {
         // Поиск пользователя по телефону
         const user = await User.findOne({ where: { phone } });
         if (!user) {
-            return res.status(401).json({ message: "Неправильный телефон или пароль" });
+            return res.status(401).json({ message: "Неправильный телефон " });
         }
 
         // Сравнение введенного пароля с хешированным паролем в базе данных
         const isMatch = await bcrypt.compare(password, user.hashed_password);
         if (!isMatch) {
-            return res.status(401).json({ message: "Неправильный телефон или пароль" });
+            return res.status(401).json({ message: "Неправильный пароль" });
         }
 
         // Успешная авторизация, создание сессии
@@ -141,6 +141,9 @@ exports.createUser = async (req, res) => {
         // Отправить ответ об успешной регистрации
         // И выполнить перенаправление на другую страницу (например, на главную страницу)
         res.redirect('/map'); // Здесь '/' - это маршрут вашей главной страницы
+        console.log(req.session); // Вывести всю сессию
+        console.log(req.session.userId); // Вывести идентификатор пользователя из сессии
+
 
     } catch (error) {
         console.error(error);

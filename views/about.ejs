@@ -6,7 +6,8 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 flex flex-col h-screen justify-between">
-<%- include('header') %>
+    <%- include('header', { user: user }) %>
+
 
 <main class="flex flex-col items-center justify-center w-full py-20">
     <div class="w-3/5 bg-purple-50 border-radius-20px border-4 border-purple-600 p-8 shadow-xl">
@@ -26,7 +27,14 @@
         </ul>
         <br>
         <div class="text-center my-6">
-            <a href="/registration" class="bg-purple-600 border-8 border-purple-400  hover:bg-purple-700 text-white text-xl font-bold py-4 px-4 rounded-full transition duration-300">Вход / Регистрация</a>
+            <% if (user) { %>
+                <a href="/logout" class="font-bold navbar_text">Выход</a>
+            <% } else { %>
+                <!-- Код для неавторизованных пользователей -->
+                
+                <a href="/registration" class="font-bold navbar_text">Вход/Регистрация</a>
+                <!-- Дополнительный код для неавторизованных пользователей -->
+            <% } %>
         </div>
     </div>
 </main>

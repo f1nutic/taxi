@@ -16,7 +16,15 @@
             <a href="/about" class="font-bold navbar_text">О нас</a>
             <a href="/map" class="font-bold  navbar_text">Карта</a>
             <a href="/history" class="font-bold navbar_text">История</a>
-            <a href="/registration" class="font-bold navbar_text">Вход/Регистрация</a>
+            <% if (user) { %>
+                <a href="/logout" class="font-bold navbar_text">Выход</a>
+            <% } else { %>
+                <!-- Код для неавторизованных пользователей -->
+                
+                <a href="/registration" class="font-bold navbar_text">Вход/Регистрация</a>
+                <!-- Дополнительный код для неавторизованных пользователей -->
+            <% } %>
+            
         </div>
     </nav>
 </header>

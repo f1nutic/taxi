@@ -5,6 +5,8 @@ const session = require('express-session'); // Добавляем импорт �
 // const { Pool } = require('pg');
 // const jwt = require('jsonwebtoken');
 const path = require('path');
+const { User } = require('./config/database');
+
 
 
 const app = express();
@@ -42,13 +44,13 @@ app.put('/user/:id', userController.updateUser);
 app.delete('/user/:id', userController.deleteUser);
 
 app.get('/about', (req, res) => {
-    res.render('about');
+    res.render('about', { user: req.user });
 });
 
 app.get('/map', async (req, res) => {
     // Получение идентификатора пользователя из сессии
     const userId = req.session.userId;
-
+    console.log(userId)
     // Проверка наличия пользователя в сессии
     if (!userId) {
         // Пользователь не авторизован, выполните необходимые действия, например, перенаправление на страницу авторизации
@@ -71,14 +73,28 @@ app.get('/map', async (req, res) => {
     }
 });
 
+// Добавление маршрута для выхода из сессии
+app.get('/logout', (req, res) => {
+    // Удаление идентификатора пользователя из сессии
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Int Server Error' });
+        } else {
+            // После успешного выхода из сессии выполнить перенаправление на главную страницу или другую страницу
+            
+            res.redirect('/about');
+        }
+    });
+});
 
 
 app.get('/registration', (req, res) => {
-    res.render('registration');
+    res.render('registration', { user: req.user });
 });
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', { user: req.user }); // Предположим, что пользователь определен в объекте запроса req
 });
 
 app.listen(3000, (error) => {
