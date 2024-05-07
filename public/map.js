@@ -31,6 +31,8 @@ function init() {
     });
 
 
+// И так далее, в зависимости от того, какую информацию вы хотите отобразить
+
     // Обраюотчик catch
     // document.querySelector('#startPoint').addEventListener('change', function (e) {
     //     geocode(document.querySelector('#startPoint').value, true).then(function(coords) {

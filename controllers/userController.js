@@ -45,13 +45,18 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ message: "Неправильный телефон или пароль" });
         }
 
-        // Успешная авторизация, реализация сессии или токена
-        res.status(200).json({ message: "Авторизация успешна", user: user });
+        // Успешная авторизация, создание сессии
+        req.session.userId = user.id;
+
+        // Выполнить перенаправление на другую страницу после успешной авторизации
+        res.redirect('/map'); // Здесь '/profile' - это маршрут вашей страницы профиля
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 };
+
 
 // Получение списка всех пользователей
 exports.getAllUsers = async (req, res) => {
@@ -107,5 +112,38 @@ exports.deleteUser = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+};
+
+// После успешной регистрации
+exports.createUser = async (req, res) => {
+    // Получите данные из запроса
+    const { name, phone, birthday, password } = req.body;
+
+    const formattedPhone = phone.replace(/^\+/, '');
+
+    try {
+        // Хеширование пароля
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Создайте пользователя
+        const newUser = await User.create({
+            name,
+            phone: formattedPhone,
+            birthday,
+            user_type: 2,
+            hashed_password: hashedPassword,
+        });
+
+        // Создание сессии
+        req.session.userId = newUser.id;
+
+        // Отправить ответ об успешной регистрации
+        // И выполнить перенаправление на другую страницу (например, на главную страницу)
+        res.redirect('/map'); // Здесь '/' - это маршрут вашей главной страницы
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Внутренняя ошибка сервера' });
     }
 };
