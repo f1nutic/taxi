@@ -1,5 +1,5 @@
 {
-    "watch": ["public/","views/","app.js"],
+    "watch": ["public/","views/","app.js","controllers/", "config/", "routes/", "validations/"],
     "ext": "js,ejs,css",
     "ignore": ["node_modules/","dist"],
     "exec": "tailwindcss build -i  public/styles.css -o dist/styles.css && node app.js"

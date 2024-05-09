@@ -56,8 +56,7 @@ function init() {
     });
 
     document.querySelector('#route').addEventListener('click', function (e) {
-        console.log('click');
-        route();
+        // route();
     });
 
     document.querySelector('#removeControls').addEventListener('click', function (e) {
@@ -65,9 +64,9 @@ function init() {
     });
 
 
+
     function route() {
         removeRouteOnMap();
-
         ymaps.route([
             startPlacemark._geoObjectComponent._geometry._coordinates,
             endPlacemark._geoObjectComponent._geometry._coordinates
@@ -89,43 +88,37 @@ function init() {
 
 
     function geocode(address, isStart) {
-        // Возвращаем промис напрямую из вызова ymaps.geocode
-        return ymaps.geocode(address, {
-            results: 1
-        }).then(function (res) {
-            // Выбор первого результата
+        return ymaps.geocode(address, { results: 1 }).then(function (res) {
             let firstGeoObject = res.geoObjects.get(0);
-            let coords = firstGeoObject.geometry.getCoordinates(); // массив координат
-            let bounds = firstGeoObject.properties.get('boundedBy'); // границы объекта для центрирования карты
+            let coords = firstGeoObject.geometry.getCoordinates();
+            let bounds = firstGeoObject.properties.get('boundedBy');
 
-            // Создание плейсмарка
-            newPlacemark = new ymaps.Placemark(coords, {
+            let newPlacemark = new ymaps.Placemark(coords, {
                 balloonContent: 'Адрес: ' + address,
             }, {
                 preset: isStart ? 'islands#redDotIcon' : 'islands#blueDotIcon'
             });
 
-            // Добавление метки на карту
             myMap.geoObjects.add(newPlacemark);
 
-            // Удаление старой метки
             if (isStart) {
                 if (startPlacemark) {
                     myMap.geoObjects.remove(startPlacemark);
                 }
                 startPlacemark = newPlacemark;
-            }
-            else if (!isStart) {
+            } else {
                 if (endPlacemark) {
                     myMap.geoObjects.remove(endPlacemark);
                 }
                 endPlacemark = newPlacemark;
             }
 
-            // Центрирование карты
-            myMap.setBounds(bounds, {
-                checkZoomRange: true
-            });
+            myMap.setBounds(bounds, { checkZoomRange: true });
+
+            // Проверка, установлены ли обе точки
+            if (startPlacemark && endPlacemark) {
+                route(); // Автоматическое построение маршрута
+            }
         });
     }
 

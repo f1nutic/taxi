@@ -20,11 +20,17 @@
                 <a href="/logout" class="font-bold navbar_text">Выход</a>
             <% } else { %>
                 <!-- Код для неавторизованных пользователей -->
-                
+
                 <a href="/registration" class="font-bold navbar_text">Вход/Регистрация</a>
                 <!-- Дополнительный код для неавторизованных пользователей -->
             <% } %>
-            
         </div>
     </nav>
+    <div id="notification" class="opacity-0 fixed right-4 top-28 text-white px-4 py-2 rounded-md z-50 transition-opacity duration-500" role="alert">
+        <p id="notificationMessage">Успешная операция!</p>
+    </div>
 </header>
+<script src="notification.js"></script>
+
+
+

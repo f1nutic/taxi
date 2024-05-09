@@ -112,3 +112,21 @@
 .icon-yandex {
     background-image: url('img/yandex32.png'); /* Путь к вашему значку Yandex */
 }
+
+.alert-box {
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+    position: fixed;
+    top: 102px;
+    right: 12px;
+    z-index: 50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+.alert-box.show {
+    opacity: 1;
+    visibility: visible;
+}
