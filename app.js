@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // Добавляем импорт модуля session
 const path = require('path');
 const { User } = require('./config/database');
-
+const { Trip } = require('./config/database'); // Импортируем модель Trip
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -79,6 +79,28 @@ app.get('/registration', (req, res) => {
 app.get('/login', (req, res) => {
     res.locals.message = req.session.message;
     res.render('login', { user: req.user }); // Предположим, что пользователь определен в объекте запроса req
+});
+
+// Пример обработчика для создания заказа
+app.post('/create-order', async (req, res) => {
+    const { point_start, point_final } = req.body;
+    // const userId = req.session.userId; // Получаем идентификатор текущего пользователя
+
+    try {
+        // Ваш код для сохранения заказа в базе данных
+        // Например, используя модели и методы Sequelize
+        const newTrip = await Trip.create({
+            point_start,
+            point_final,
+            // userId,
+            // Другие данные заказа, такие как время, стоимость и т.д.
+        });
+
+        res.status(201).json({ message: 'Order created successfully', trip: newTrip });
+    } catch (error) {
+        console.error("Ошибка при создании заказа:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 app.listen(3000, (error) => {

@@ -65,12 +65,34 @@ function init() {
     });
 
     document.querySelector('#route').addEventListener('click', function (e) {
-        // TODO - Создание заказа
+        const startPoint = document.querySelector('#startPoint').value;
+        const endPoint = document.querySelector('#endPoint').value;
+        const duration = document.querySelector('#duration').innerText;
+        const distance = document.querySelector('#distance').innerText;
+        const cost = document.querySelector('#cost').innerText;
+        const userId = '#{userId}'; // Получение идентификатора текущего пользователя из сессии
+        fetch('/create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ point_start: startPoint, point_final: endPoint, duration, distance, cost: cost, customer:userId })
+
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // Возможно, здесь вы захотите что-то сделать с ответом от сервера
+        })
+        .catch(error => console.error(error));
     });
+    
 
     document.querySelector('#removeControls').addEventListener('click', function (e) {
         clearAllControls();
     });
+
+    
 
     function route() {
         removeRouteOnMap();
