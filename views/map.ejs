@@ -13,20 +13,13 @@
 <div class="container mx-auto flex px-5 py-18">
     <div id="map" class="flex-auto w-3/5" style="height: 700px;"></div>
     <div class="content-center flex-auto ml-4 bg-purple-50 w-2/5 border-4 border-purple-600 shadow-xl " style="border-radius: 20px">
-        <% if (user) { %>
-            <!-- Код для авторизованных пользователей -->
-            <p class="text-center mb-8 text-5xl font-bold">Вызвать такси, <%= user.name %>!</p>
-            <!-- Дополнительный код для авторизованных пользователей -->
-        <% } else { %>
-            <!-- Код для неавторизованных пользователей -->
-            <p class="text-center mb-8 text-5xl font-bold">Вы не авторизованы</p>
-            <!-- Дополнительный код для неавторизованных пользователей -->
-        <% } %>
+        <p class="text-center mb-8 text-5xl font-bold">Вызвать такси</p>
         <input type="text" id="startPoint" placeholder="Начальная точка" class="mb-4 block mx-auto w-11/12 px-4 py-3  border-4 border-purple-600 rounded-md text-lg focus:outline-none">
         <input type="text" id="endPoint" placeholder="Конечная точка" class="block mx-auto w-11/12 px-4 py-3 border-4 border-purple-600 rounded-md text-lg focus:outline-none">
         <div id="routeInfo" class="mx-12 my-8 text-xl">
             <p>Время поездки: <span id="duration"></span></p>
             <p>Расстояние: <span id="distance"></span></p>
+            <p>Стоимость: <span id="cost"></span></p>
         </div>
         <div class="controls mx-5 flex">
             <button id="route" class="mx-auto bg-white rounded-full px-6 py-2 text-xl font-bold button_order_form">Заказать</button>

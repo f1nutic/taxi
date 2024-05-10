@@ -9,15 +9,14 @@
     <%- include('header', { user: user }) %>
 
 
-<main class="flex flex-col items-center justify-center w-full py-20">
+<main class="flex flex-col items-center justify-center w-f  ull py-20">
     <div class="w-3/5 bg-purple-50 border-radius-20px border-4 border-purple-600 p-8 shadow-xl">
-        <h1 class="font-bold text-center text-5xl mb-6">О нас</h1>
-        <p class="text-justify mb-8" style="font-size: 26px">
+        <h1 class="font-bold text-center text-5xl mb-6">Главная</h1>
+        <p class="text-justify mb-2" style="font-size: 26px">
             <b style="font-size: 32px; color: #9333ea">Максимка</b> — это проект, предоставляющий услуги такси в вашем городе. <br>
             Мы помогаем людям быстро и удобно добираться из точки А в точку Б. <br>
             Наша цель — сделать процесс заказа такси максимально простым и понятным для каждого клиента.
         </p>
-        <br>
         <p style="font-size: 26px">Используемые технологии:</p>
         <ul class="list-disc list-inside stack_tech ">
             <li><a href="https://yandex.ru/maps-api/">Yandex Maps API</a></li>
@@ -25,13 +24,12 @@
             <li><a href="https://expressjs.com/ru/">Express JS</a></li>
             <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
         </ul>
-        <div class="text-center my-6">
+        <div class="text-center">
             <% if (user) { %>
-                <a href="/logout" class="font-bold navbar_text">Выход</a>
+                <a href="/logout" class="text-center mx-auto mt-4 block w-1/4 bg-purple-600 border-4 border-purple-400  hover:bg-purple-700 text-white text-xl font-bold py-2 rounded-full transition duration-300">Выйти</a>
             <% } else { %>
                 <!-- Код для неавторизованных пользователей -->
-                
-                <a href="/registration" class="font-bold navbar_text">Вход/Регистрация</a>
+                <a href="/registration" class="text-center mx-auto mt-4 block w-1/4 bg-purple-600 border-4 border-purple-400  hover:bg-purple-700 text-white text-xl font-bold py-2 rounded-full transition duration-300">Войти</a>
                 <!-- Дополнительный код для неавторизованных пользователей -->
             <% } %>
         </div>

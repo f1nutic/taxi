@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             notification.style.backgroundColor = 'red';
         }
 
-        // Установите timeout, чтобы показать уведомление и скрыть его через 5 секунд
+        // timeout, чтобы показать уведомление и скрыть его через 5 секунд
         setTimeout(() => {
             notification.style.transition = 'opacity 0.5s';
             notification.style.opacity = '1';
@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 notification.style.opacity = '0';
                 setTimeout(() => {
                     notification.classList.add('opacity-0');
-                }, 500); // Подождите пока анимация исчезновения завершится
+                }, 500); // Завершение анимации исчезновения
             }, 4500); // 4500 мс показа + 500 мс исчезновения
         }, 10); // Небольшая задержка перед началом анимации
     }

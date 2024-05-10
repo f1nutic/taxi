@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <link href="styles.css" rel="stylesheet">
     <title>Document</title>
+    <link rel="icon" href="img/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
 </head>
 <body class="bg-gray-100">
 <header class="bg-white py-4 shadow-md">
@@ -13,15 +15,14 @@
             <a href="/about" class="ml-4 font-bold navbar_text">Максимка</a>
         </div>
         <div class="contents">
-            <a href="/about" class="font-bold navbar_text">О нас</a>
+            <a href="/about" class="font-bold navbar_text">Главная</a>
             <a href="/map" class="font-bold  navbar_text">Карта</a>
             <a href="/history" class="font-bold navbar_text">История</a>
             <% if (user) { %>
-                <a href="/logout" class="font-bold navbar_text">Выход</a>
+                <a href="/logout" class="font-bold navbar_text">Выйти</a>
             <% } else { %>
                 <!-- Код для неавторизованных пользователей -->
-
-                <a href="/registration" class="font-bold navbar_text">Вход/Регистрация</a>
+                <a href="/login" class="font-bold navbar_text">Войти</a>
                 <!-- Дополнительный код для неавторизованных пользователей -->
             <% } %>
         </div>

@@ -5,11 +5,21 @@ function init() {
         center: [48.480205, 135.071913],
         zoom: 15,
         controls: [],
-    })
+    },{
+        yandexMapDisablePoiInteractivity: true
+    });
+
+    let actualProvider = new ymaps.traffic.provider.Actual();
+    actualProvider.setMap(myMap);
 
     let startPlacemark;
     let endPlacemark;
     let currentRoute;
+    let timeInMIN;
+    let distanceInKM;
+    let distanceRoute;
+    let costRoute;
+    let trafficScore;
 
     clearAllControls();
 
@@ -24,14 +34,13 @@ function init() {
         results: 3,
         boundedBy: boundsKHV,
     });
-
     let suggestViewPointEnd = new ymaps.SuggestView('endPoint', {
         results: 3,
         boundedBy: boundsKHV,
     });
 
 
-// И так далее, в зависимости от того, какую информацию вы хотите отобразить
+    // И так далее, в зависимости от того, какую информацию вы хотите отобразить
 
     // Обраюотчик catch
     // document.querySelector('#startPoint').addEventListener('change', function (e) {
@@ -56,14 +65,12 @@ function init() {
     });
 
     document.querySelector('#route').addEventListener('click', function (e) {
-        // route();
+        // TODO - Создание заказа
     });
 
     document.querySelector('#removeControls').addEventListener('click', function (e) {
         clearAllControls();
     });
-
-
 
     function route() {
         removeRouteOnMap();
@@ -81,6 +88,8 @@ function init() {
             myMap.geoObjects.add(route);
             document.querySelector('#duration').innerText = getTimeRoute(route.getHumanTime());
             document.querySelector('#distance').innerText = getDistanceRoute(route.getHumanLength());
+            trafficScore = getTrafficScore();
+            calculateCost();
         }, function (err) {
             throw err;
         }, this);
@@ -139,6 +148,7 @@ function init() {
 
     function getTimeRoute (time) {
         const minutes = parseInt(time);
+        timeInMIN = minutes;
         let label = 'минут';
         if (minutes % 10 === 1 && minutes % 100 !== 11) {
             label = 'минута';
@@ -154,6 +164,9 @@ function init() {
         const parts = normalizedDistance.split('\u00A0');
         const number = parseInt(parts[0], 10);
         const unit = parts[1];
+
+        distanceInKM = (unit === 'км');
+        distanceRoute = number;
 
         // Определяем правильное склонение
         let label = '';
@@ -179,16 +192,42 @@ function init() {
         return `${number} ${label}`;
     }
 
+    function getTrafficScore () {
+        return actualProvider.state._data.level;
+    }
+
     function clearAllControls() {
         removeRouteOnMap();
         currentRoute = null;
         removePlacemarkOnMap();
         startPlacemark = null;
         endPlacemark = null;
+        timeInMIN = null;
+        distanceRoute = null;
+        distanceInKM = null;
+        costRoute = null;
         document.querySelector('#startPoint').value = '';
         document.querySelector('#endPoint').value = '';
         document.querySelector('#duration').innerText = '';
         document.querySelector('#distance').innerText = '';
+        document.querySelector('#cost').innerText = '';
     }
+
+    function calculateCost() {
+        $.ajax({
+            url: '/calculate-cost', // Путь к вашему серверному API
+            method: 'POST',
+            data: { distance: distanceRoute, distanceInKM: distanceInKM, duration: timeInMIN, trafficScore: trafficScore },
+            success: function(response) {
+                $('#cost').text(response.cost + ' руб.'); // Обновление поля стоимости на странице
+                costRoute = response.cost
+            },
+
+            error: function() {
+                console.error("Ошибка при расчете стоимости");
+            }
+        });
+    }
+
 }
 

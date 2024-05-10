@@ -1,49 +1,38 @@
 const bcrypt = require('bcrypt');
 const { User } = require('../config/database');
-const moment = require('moment');
-
-
 
 exports.loginUser = async (req, res) => {
     let { phone, password } = req.body;
     try {
-        // Поиск пользователя по телефону
+        // Проверка на существующего пользователя по телефону
         phone = phone.slice(1);  // Удаление знака '+' в начале телефона, если он есть
         const user = await User.findOne({ where: { phone } });
         if (!user) {
-            // Пользователь не найден, отправить обратно на страницу входа с сообщением
             return res.redirect(`/login?message=Пользователь+не+найден&status=fail`);
         }
 
         // Сравнение введенного пароля с хешированным паролем в базе данных
         const isMatch = await bcrypt.compare(password, user.hashed_password);
         if (!isMatch) {
-            // Неверный пароль, отправить обратно на страницу входа с сообщением
             return res.redirect(`/login?message=Неверный+пароль&status=fail`);
         }
 
-        // Успешная авторизация, создание сессии
-        req.session.userId = user.id;
-        // Выполнить перенаправление на другую страницу после успешной авторизации
-        res.redirect(`/map?message=Приветствуем,+${encodeURIComponent(user.name)}!&status=success`);
+        req.session.userId = user.id; // Успешная авторизация, создание сессии
+        res.redirect(`/map?message=Приветствуем,+${user.name}!&status=success`);
+
     } catch (error) {
         console.error(error);
         res.redirect(`/login?message=Внутренняя+ошибка+сервера&status=fail`);
     }
 };
 
-// После успешной регистрации
 exports.createUser = async (req, res) => {
-    // Получите данные из запроса
     const { name, phone, birthday, password } = req.body;
-
     const formattedPhone = phone.replace(/^\+/, '');
-
     try {
         // Хеширование пароля
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Создайте пользователя
         const newUser = await User.create({
             name,
             phone: formattedPhone,
@@ -55,24 +44,13 @@ exports.createUser = async (req, res) => {
         // Создание сессии
         req.session.userId = newUser.id;
 
-        // Отправить ответ об успешной регистрации
-        // И выполнить перенаправление на другую страницу (например, на главную страницу)
-        res.redirect('/map'); // Здесь '/' - это маршрут вашей главной страницы
-        console.log(req.session); // Вывести всю сессию
-        console.log(req.session.userId); // Вывести идентификатор пользователя из сессии
-
-
+        res.redirect('/map?message=Успешная+регистрация!&status=success');
     } catch (error) {
-        // req.session.message = {
-        //     type: 'error', // или 'error' для ошибок
-        //     // content: `Ошибка: ${}`
-        // };
-        console.error(error);
-        res.redirect('/login');
-        res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+        res.redirect(`/registration?message=Ошибка:+${error}&status=fail`);
+        return error;
     }
-};
 
+};
 
 // Получение списка всех пользователей
 exports.getAllUsers = async (req, res) => {

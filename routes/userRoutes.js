@@ -7,16 +7,15 @@ const userController = require('../controllers/userController');
 // Middleware для валидации данных регистрации
 router.post('/registration', userValidation.validateRegistration, async (req, res) => {
     const errors = validationResult(req);
-    console.log(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.redirect(`/registration?message=Ошибка:+${errors.errors[0].msg}&status=fail`); // Вывод ошибки по валидации
     }
 
     try {
         await userController.createUser(req, res);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+        return res.redirect(`/registration?message=Ошибка:+${error}&status=fail`);
     }
 });
 

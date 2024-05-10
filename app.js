@@ -22,10 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('dist'));
 app.use(express.static('public'));
 
-const userController = require('./controllers/userController');
 
 const userRoutes = require('./routes/userRoutes');
+const costRoutes = require('./routes/costRoutes')
 app.use(userRoutes);
+app.use(costRoutes);
 
 app.get('/', (req, res) => {
     res.redirect('/about');
@@ -36,19 +37,16 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/map', async (req, res) => {
-    // Получение идентификатора пользователя из сессии
-    const userId = req.session.userId;
-    // console.log(userId)
+    const userId = req.session.userId; // Получение идентификатора пользователя из сессии
+
     // Проверка наличия пользователя в сессии
     if (!userId) {
-        // Пользователь не авторизован, выполните необходимые действия, например, перенаправление на страницу авторизации
-        return res.redirect('/login');
+        return res.redirect('/login?message=Вы+не+вошли+в+систему!&status=fail'); // Пользователь не авторизован
     }
 
     try {
-        // Получение данных о пользователе из базы данных
-        const user = await User.findByPk(userId);
-        res.locals.message = req.session.message;
+        const user = await User.findByPk(userId); // Получение данных о пользователе из БД
+        // res.locals.message = req.session.message;
         // Отображение информации о текущем пользователе на странице
         res.render('map', {
             user: user,
@@ -69,13 +67,10 @@ app.get('/logout', (req, res) => {
             console.error(err);
             res.status(500).json({ error: 'Int Server Error' });
         } else {
-            // После успешного выхода из сессии выполнить перенаправление на главную страницу или другую страницу
-
             res.redirect('/about?message=Успешный+выход!&status=success');
         }
     });
 });
-
 
 app.get('/registration', (req, res) => {
     res.render('registration', { user: req.user });
