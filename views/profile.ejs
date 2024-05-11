@@ -1,0 +1,86 @@
+<html lang="ru">
+<head>
+    <title>Профиль</title>
+</head>
+<body>
+<%- include('header') %>
+<div class="container mx-auto mt-8">
+    <div class="bg-white border-radius-20px border-2 border-purple-600 shadow overflow-hidden sm:rounded-lg">
+        <div class="bg-purple-50 border-b-2 border-purple-600 px-4 py-5 sm:px-6">
+            <p class="text-2xl text-center font-semibold">Профиль пользователя</p>
+        </div>
+        <div class="border-t border-gray-200">
+            <dl>
+                <div class="bg-grey-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-lg font-medium text-gray-500">ID</dt>
+                    <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2"><%= user.id %></dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-lg font-medium text-gray-500">Имя</dt>
+                    <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2"><%= user.name %></dd>
+                </div>
+                <div class="bg-grey-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-lg font-medium text-gray-500">Номер телефона</dt>
+                    <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2">+<%= user.phone %></dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-lg font-medium text-gray-500">День рождения</dt>
+                    <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2"><%= formatDate(user.birthday) %></dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-6 mb-6 bg-white shadow overflow-hidden sm:rounded-lg border-radius-20px border-2 border-purple-600">
+        <div class="bg-purple-50 border-b-2 border-purple-600 px-4 py-5 sm:px-6">
+            <h3 class="text-2xl text-center font-semibold">История заказов</h3>
+        </div>
+        <div class="border-t border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-center text-lg font-semibold tracking-wider">
+                        № заказа
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-center text-lg font-semibold  tracking-wider">
+                        Дата и время заказа
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-center text-lg font-semibold  tracking-wider">
+                        Начальный пункт
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-center text-lg font-semibold  tracking-wider">
+                        Конечный пункт
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-center text-lg font-semibold  tracking-wider">
+                        Стоимость
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <% orders.forEach(function(order) { %>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-center font-semibold text-lg text-gray-700">
+                            <%= order.id%>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap  text-center text-lg text-gray-900">
+                            <%= formatDate(order.time_create, true)  %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                            <%= order.point_start %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                            <%= order.point_final %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                            <%= order.cost %> руб.
+                        </td>
+                    </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<%- include('footer') %>
+</body>
+</html>

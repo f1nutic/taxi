@@ -23,7 +23,7 @@ app.use(express.static('public'));
 
 const userRoutes = require('./routes/userRoutes');
 const costRoutes = require('./routes/costRoutes');
-const tripRoutes = require('./routes/tripRoutes')
+const tripRoutes = require('./routes/tripRoutes');
 app.use(userRoutes);
 app.use(costRoutes);
 app.use(tripRoutes);

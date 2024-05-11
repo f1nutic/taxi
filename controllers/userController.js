@@ -1,5 +1,8 @@
 const bcrypt = require('bcrypt');
 const { User } = require('../config/database');
+const { Trip } = require('../config/database');
+const { Trip_status } = require('../config/database');
+const { formatDate } = require('../public/profile.js');
 
 exports.loginUser = async (req, res) => {
     let { phone, password } = req.body;
@@ -51,6 +54,21 @@ exports.createUser = async (req, res) => {
     }
 
 };
+
+exports.userProfile = async (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/login?message=Вы+не+вошли+в+систему!&status=fail');
+    }
+    try {
+        const user = await User.findByPk(req.session.userId);
+        const orders = await Trip.findAll({ where: { customer: user.id } });
+        res.locals.formatDate = formatDate;
+        res.render('profile', { user, orders });
+    } catch (error) {
+        res.redirect(`/login?message=Ошибка:+${error}&status=fail`);
+    }
+};
+
 
 // Получение списка всех пользователей
 exports.getAllUsers = async (req, res) => {

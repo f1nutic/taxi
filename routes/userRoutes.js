@@ -8,7 +8,7 @@ const userController = require('../controllers/userController');
 router.post('/registration', userValidation.validateRegistration, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.redirect(`/registration?message=Ошибка:+${errors.errors[0].msg}&status=fail`); // Вывод ошибки по валидации
+        return res.redirect(`/registration?message=Ошибка:+${errors.errors[0].msg}&status=fail`);
     }
 
     try {
@@ -20,5 +20,6 @@ router.post('/registration', userValidation.validateRegistration, async (req, re
 });
 
 router.post('/login', userController.loginUser);
+router.get('/profile', userController.userProfile);
 
 module.exports = router;
