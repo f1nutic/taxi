@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { User } = require('../config/database');
-const { Trip } = require('../config/database');
+
 exports.loginUser = async (req, res) => {
     let { phone, password } = req.body;
     try {
@@ -109,21 +109,4 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-exports.createOrder = async (req, res) => {
-    const { startPoint, endPoint, duration, distance, cost } = req.body;
-    try {
-        const newTrip = await Trip.create({
-            startPoint,
-            endPoint,
-            duration,
-            distance,
-            cost,
-            userId: req.session.userId // или любой другой способ идентификации пользователя
-        });
-        res.status(200).json({ message: 'Order created', data: newTrip });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
-    }
-};
 

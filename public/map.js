@@ -13,7 +13,9 @@ function init() {
     actualProvider.setMap(myMap);
 
     let startPlacemark;
+    let startPoint;
     let endPlacemark;
+    let endPoint;
     let currentRoute;
     let timeInMIN;
     let distanceInKM;
@@ -65,28 +67,19 @@ function init() {
     });
 
     document.querySelector('#route').addEventListener('click', function (e) {
-        const startPoint = document.querySelector('#startPoint').value;
-        const endPoint = document.querySelector('#endPoint').value;
-        const duration = document.querySelector('#duration').innerText;
-        const distance = document.querySelector('#distance').innerText;
-        const cost = document.querySelector('#cost').innerText;
-        const userId = '#{userId}'; // Получение идентификатора текущего пользователя из сессии
         fetch('/create-order', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ point_start: startPoint, point_final: endPoint, duration, distance, cost: cost, customer:userId })
-
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ point_start: startPoint, point_final: endPoint, cost: costRoute })
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            // Возможно, здесь вы захотите что-то сделать с ответом от сервера
-        })
-        .catch(error => console.error(error));
+            .then(response => response.json())
+            .then(data => {
+                // Вызываем функцию для отображения уведомления, которая теперь определена в notification.js
+                window.showNotification(data.message, data.status);
+            })
+            .catch(error => console.error(error));
     });
-    
+
 
     document.querySelector('#removeControls').addEventListener('click', function (e) {
         clearAllControls();
@@ -137,11 +130,13 @@ function init() {
                     myMap.geoObjects.remove(startPlacemark);
                 }
                 startPlacemark = newPlacemark;
+                startPoint = address;
             } else {
                 if (endPlacemark) {
                     myMap.geoObjects.remove(endPlacemark);
                 }
                 endPlacemark = newPlacemark;
+                endPoint = address;
             }
 
             myMap.setBounds(bounds, { checkZoomRange: true });
@@ -223,7 +218,9 @@ function init() {
         currentRoute = null;
         removePlacemarkOnMap();
         startPlacemark = null;
+        startPoint = null;
         endPlacemark = null;
+        endPoint = null;
         timeInMIN = null;
         distanceRoute = null;
         distanceInKM = null;

@@ -24,11 +24,11 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     point_start: {
-      type: "POINT",
+      type: DataTypes.STRING,
       allowNull: true
     },
     point_final: {
-      type: "POINT",
+      type: DataTypes.STRING,
       allowNull: true
     },
     time_create: {
@@ -52,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     cost: {
-      type: DataTypes.DECIMAL(19,4),
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {

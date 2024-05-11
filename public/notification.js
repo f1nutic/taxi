@@ -28,3 +28,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }, 10); // Небольшая задержка перед началом анимации
     }
 });
+
+window.showNotification = function (message, status) {
+    const notification = document.getElementById('notification');
+    const notificationMessage = document.getElementById('notificationMessage');
+    notificationMessage.textContent = message; // Установить текст сообщения
+    notification.classList.remove('opacity-0'); // Удалить класс скрытия
+    notification.style.backgroundColor = status === 'success' ? 'green' : 'red'; // Задать цвет фона в зависимости от статуса
+
+    notification.style.opacity = '1';
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            notification.classList.add('opacity-0');
+        }, 500); // Плавное исчезновение уведомления
+    }, 4500);
+};
