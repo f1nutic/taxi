@@ -1,4 +1,4 @@
-const { Trip } = require('../config/database');
+const { Trip, User,sequelize } = require('../config/database');
 
 exports.createOrder = async (req, res) => {
     if (!req.session.userId) {
@@ -6,7 +6,7 @@ exports.createOrder = async (req, res) => {
     }
 
     const { point_start, point_final, cost } = req.body;
-    try {
+    try {           
         const newTrip = await Trip.create({
             customer: req.session.userId,
             point_start,
@@ -16,7 +16,7 @@ exports.createOrder = async (req, res) => {
             time_create: new Date().toISOString()
         });
 
-        res.json({ message: `Заказ №${newTrip.id} создан. Ожидайте.`, status: 'success' });
+        res.json({ message: `Заказ №${newTrip.id} создан. Ожидайте.`, status: 'success' });        
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: `Ошибка: ${error}`, status: 'fail' });
