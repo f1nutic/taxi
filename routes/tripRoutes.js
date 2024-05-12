@@ -12,4 +12,6 @@ router.post('/create-order', async (req, res) => {
 
 router.post('/create-order', tripController.createOrder);
 
+router.get('/trip/:id', tripController.getTripById);
+
 module.exports = router;

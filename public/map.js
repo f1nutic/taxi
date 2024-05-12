@@ -67,14 +67,21 @@ function init() {
     });
 
     document.querySelector('#route').addEventListener('click', function (e) {
+        // Предполагается, что `currentRoute` - это объект маршрута, полученный от API карт
+        const routeData = extractRouteData(currentRoute);
+
         fetch('/create-order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ point_start: startPoint, point_final: endPoint, cost: costRoute })
+            body: JSON.stringify({
+                point_start: startPoint,
+                point_final: endPoint,
+                cost: costRoute,
+                route_data: routeData  // Отправляем только нужные и сериализуемые данные
+            })
         })
             .then(response => response.json())
             .then(data => {
-                // Вызываем функцию для отображения уведомления, которая теперь определена в notification.js
                 window.showNotification(data.message, data.status);
             })
             .catch(error => console.error(error));
@@ -85,7 +92,14 @@ function init() {
         clearAllControls();
     });
 
-    
+    function extractRouteData(route) {
+        return {
+            points: route.getWayPoints().toArray().map(point => point.geometry.getCoordinates()),
+            path: route.getPaths().toArray().map(path => path.geometry.getCoordinates()),
+            distance: route.getLength(),
+            duration: route.getJamsTime()
+        };
+    }
 
     function route() {
         removeRouteOnMap();

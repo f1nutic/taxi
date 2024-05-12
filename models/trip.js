@@ -54,6 +54,10 @@ module.exports = function(sequelize, DataTypes) {
     cost: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    route_data: {
+      type: DataTypes.JSON,
+      allowNull: true
     }
   }, {
     sequelize,
