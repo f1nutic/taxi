@@ -133,3 +133,19 @@
     opacity: 1;
     visibility: visible;
 }
+
+.link_trip {
+    color:black;
+    transition: 0.5s;
+}
+
+.link_trip:hover{
+    color:#9333ea;
+}
+
+.table-row {
+    transition: background-color 0.3s ease; /* Добавляем переход для плавной анимации */
+}
+.table-row:hover {
+    background-color: #d4bceb; /* Цвет подсветки при наведении */
+}

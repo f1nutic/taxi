@@ -37,7 +37,7 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/map', async (req, res) => {
-    req.session.userId = 44;
+    
     const userId = req.session.userId; // Получение идентификатора пользователя из сессии
 
     // const userId = req.session.userId; // Получение идентификатора пользователя из сессии
