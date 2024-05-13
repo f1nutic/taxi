@@ -1,13 +1,13 @@
-const { Trip, User,sequelize } = require('../config/database');
+const { Trip, User } = require('../config/database');
+const moment = require('moment');
 
 exports.createOrder = async (req, res) => {
     if (!req.session.userId) {
-        return res.status(401).json({ message: 'В сессии нет пользователя', status: 'fail' });
+        return res.redirect(`/login?message=Вы+не+авторизованы&status=fail`);
     }
 
     const { point_start, point_final, cost, route_data } = req.body;
-    console.log(route_data);
-    try {           
+    try {
         const newTrip = await Trip.create({
             customer: req.session.userId,
             point_start,
@@ -18,16 +18,22 @@ exports.createOrder = async (req, res) => {
             time_create: new Date().toISOString()
         });
 
-        res.json({ message: `Заказ №${newTrip.id} создан. Ожидайте.`, status: 'success' });        
+        // успешный ответ с ID нового заказа
+        res.json({
+            message: `Заказ №${newTrip.id} успешно создан. Перенаправление на страницу заказа...`,
+            status: 'success',
+            tripId: newTrip.id
+        });
+
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: `Ошибка: ${error}`, status: 'fail' });
+        console.error(error); // TODO loger
+        res.status(500).send('Ошибка сервера при создании заказа');
     }
 };
 
 exports.getTripById = async (req, res) => {
     if (!req.session.userId) {
-        return res.status(401).json({ message: 'В сессии нет пользователя', status: 'fail' });
+        return res.redirect(`/login?message=Вы+не+авторизованы&status=fail`);
     }
 
     try {
@@ -39,22 +45,24 @@ exports.getTripById = async (req, res) => {
         });
 
         if (!trip) {
-            return res.status(404).json({ message: 'Поездка не найдена', status: 'fail' });
+            return res.redirect(`/map?message=Поездка+№${req.params.id}+не+найдена&status=fail`);
         }
 
         const user = await User.findByPk(req.session.userId); // Получаем информацию о пользователе
 
+        console.log(trip.time_create);
+
         const renderOptions = {
             trip,
-            user, // Добавляем пользователя для доступа в шаблоне
+            user,
             YANDEX_STATIC_API_KEY: process.env.YANDEX_STATIC_API_KEY,
-            YANDEX_SUGGEST_API_KEY: process.env.YANDEX_SUGGEST_API_KEY
+            YANDEX_SUGGEST_API_KEY: process.env.YANDEX_SUGGEST_API_KEY,
+            moment,
         };
-
         res.render('tripInfo', renderOptions);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: `Ошибка: ${error}`, status: 'fail' });
+        console.error(error); // TODO loger
+        window.showNotification('Ошибка сервера','fail')
     }
 };
 

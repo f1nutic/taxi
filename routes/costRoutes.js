@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const costPerKm = 15;
-const costPerMinute = 3;
+const costPerKm = 3;
+const costPerMinute = 5;
 const baseRate = 70;
-const trafficCoefficient = 5;
+const trafficCoefficient = 3;
 
 router.post('/calculate-cost', (req, res) => {
     try {
         const { distance, distanceInKM ,duration, trafficScore } = req.body;
         let cost;
-        if (distanceInKM === true) {
+        if (distanceInKM) {
             // Расчёт стоимости, если КМ пришли
             cost = baseRate
                 + (costPerKm * distance)

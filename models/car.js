@@ -27,14 +27,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: true
     },
-    body: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'car_body',
-        key: 'id'
-      }
-    },
     user: {
       type: DataTypes.INTEGER,
       allowNull: true,

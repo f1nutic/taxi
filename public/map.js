@@ -22,6 +22,8 @@ function init() {
     let distanceRoute;
     let costRoute;
     let trafficScore;
+    let startPointSelected = false;
+    let endPointSelected = false;
 
     clearAllControls();
 
@@ -35,14 +37,23 @@ function init() {
     let suggestViewPointStart = new ymaps.SuggestView('startPoint', {
         results: 3,
         boundedBy: boundsKHV,
+        strictBounds: true,
     });
     let suggestViewPointEnd = new ymaps.SuggestView('endPoint', {
         results: 3,
         boundedBy: boundsKHV,
+        strictBounds: true,
     });
 
+    suggestViewPointStart.events.add('select',function () {
+        geocode(document.querySelector('#startPoint').value, true);
+        startPointSelected = true;
+    });
 
-    // И так далее, в зависимости от того, какую информацию вы хотите отобразить
+    suggestViewPointEnd.events.add('select', function () {
+        geocode(document.querySelector('#endPoint').value, false);
+        endPointSelected = true;
+    });
 
     // Обраюотчик catch
     // document.querySelector('#startPoint').addEventListener('change', function (e) {
@@ -54,21 +65,19 @@ function init() {
     //     })
     // });
 
-    document.querySelector('#startPoint').addEventListener('blur', function (e) {
-        setTimeout(() => {
-                geocode(document.querySelector('#startPoint').value, true);
-        }, 300);
+    document.querySelector('#startPoint').addEventListener('input', function() {
+        startPointSelected = false;
     });
 
-    document.querySelector('#endPoint').addEventListener('blur', function (e) {
-        setTimeout(() => {
-                geocode(document.querySelector('#endPoint').value, false);
-        }, 300);
+    document.querySelector('#endPoint').addEventListener('input', function() {
+        endPointSelected = false;
     });
 
     document.querySelector('#route').addEventListener('click', function (e) {
-        // Предполагается, что `currentRoute` - это объект маршрута, полученный от API карт
-        const routeData = extractRouteData(currentRoute);
+        if (!(placeMarksHasData() && placeMarksSelected())) {
+            window.showNotification('Неккоректно выбран адрес', 'fail');
+        }
+        const routeData = extractRouteData(currentRoute); // данные маршрута для хранения в БД
 
         fetch('/create-order', {
             method: 'POST',
@@ -77,16 +86,25 @@ function init() {
                 point_start: startPoint,
                 point_final: endPoint,
                 cost: costRoute,
-                route_data: routeData  // Отправляем только нужные и сериализуемые данные
+                route_data: routeData
             })
         })
             .then(response => response.json())
             .then(data => {
                 window.showNotification(data.message, data.status);
-            })
-            .catch(error => console.error(error));
-    });
 
+                if (data.status === 'success') {
+                    // Если заказ успешно создан, редирект на страницу заказа через вреся
+                    setTimeout(() => {
+                        window.location.href = `/trip/${data.tripId}`;
+                    }, 4000);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                window.showNotification('Ошибка при создании заказа', 'fail');
+            });
+    });
 
     document.querySelector('#removeControls').addEventListener('click', function (e) {
         clearAllControls();
@@ -102,6 +120,10 @@ function init() {
     }
 
     function route() {
+        if (!placeMarksSelected()) {
+            window.showNotification('Необходимо выбрать адрес из выпадающего списка', 'fail')
+            return;
+        }
         removeRouteOnMap();
         ymaps.route([
             startPlacemark._geoObjectComponent._geometry._coordinates,
@@ -111,6 +133,7 @@ function init() {
             routingMode: 'auto',
             boundedBy: boundsKHV,
             mapStateAutoApply: true,
+            avoidTrafficJams: true,
         }).done(function (route) {
             currentRoute = route;
             route.options.set("mapStateAutoApply", true);
@@ -134,7 +157,7 @@ function init() {
             let newPlacemark = new ymaps.Placemark(coords, {
                 balloonContent: 'Адрес: ' + address,
             }, {
-                preset: isStart ? 'islands#redDotIcon' : 'islands#blueDotIcon'
+                preset: isStart ? 'islands#violetDotIcon' : 'islands#orangeDotIcon'
             });
 
             myMap.geoObjects.add(newPlacemark);
@@ -156,17 +179,25 @@ function init() {
             myMap.setBounds(bounds, { checkZoomRange: true });
 
             // Проверка, установлены ли обе точки
-            if (startPlacemark && endPlacemark) {
+            if (placeMarksHasData()) {
                 route(); // Автоматическое построение маршрута
             }
         });
+    }
+
+    function placeMarksHasData () {
+        return (startPlacemark && endPlacemark);
+    }
+
+    function placeMarksSelected () {
+        return (startPointSelected && endPointSelected);
     }
 
     function removePlacemarkOnMap () {
         if (startPlacemark) {
             myMap.geoObjects.remove(startPlacemark);
         }
-        if  (endPlacemark) {
+        if (endPlacemark) {
             myMap.geoObjects.remove(endPlacemark);
         }
     }
@@ -239,6 +270,8 @@ function init() {
         distanceRoute = null;
         distanceInKM = null;
         costRoute = null;
+        startPointSelected = false;
+        endPointSelected = false;
         document.querySelector('#startPoint').value = '';
         document.querySelector('#endPoint').value = '';
         document.querySelector('#duration').innerText = '';
@@ -248,7 +281,7 @@ function init() {
 
     function calculateCost() {
         $.ajax({
-            url: '/calculate-cost', // Путь к вашему серверному API
+            url: '/calculate-cost',
             method: 'POST',
             data: { distance: distanceRoute, distanceInKM: distanceInKM, duration: timeInMIN, trafficScore: trafficScore },
             success: function(response) {
@@ -261,6 +294,5 @@ function init() {
             }
         });
     }
-
 }
 

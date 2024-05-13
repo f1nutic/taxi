@@ -6,26 +6,24 @@
 <body>
 <%- include('header') %>
 <div class="container mx-auto mt-8">
-    <div class="bg-white border-radius-20px border-2 border-purple-600 shadow overflow-hidden sm:rounded-lg">
-        <div class="bg-purple-50 border-b-2 border-purple-600 px-4 py-5 sm:px-6">
+    <div class="bg-white rounded-lg border-2 border-purple-600 shadow overflow-hidden">
+        <div class="bg-purple-50 border-b-2 border-purple-600 px-4 py-5">
             <p class="text-2xl text-center font-semibold">Профиль пользователя</p>
         </div>
-        <div class="border-t border-gray-200">
-            <dl>
-                <div class="bg-grey-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-lg font-medium text-gray-500">ID</dt>
+        <div>
+            <dl class="sm:grid sm:grid-cols-2">
+                <!-- Колонка слева -->
+                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-lg font-semibold text-gray-700">Имя:</dt>
+                    <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2"><%= user.name %></dd>
+                    <dt class="text-lg font-semibold text-gray-700">ID:</dt>
                     <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2"><%= user.id %></dd>
                 </div>
+                <!-- Колонка справа -->
                 <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-lg font-medium text-gray-500">Имя</dt>
-                    <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2"><%= user.name %></dd>
-                </div>
-                <div class="bg-grey-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-lg font-medium text-gray-500">Номер телефона</dt>
+                    <dt class="text-lg font-semibold text-gray-700">Номер телефона:</dt>
                     <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2">+<%= user.phone %></dd>
-                </div>
-                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-lg font-medium text-gray-500">День рождения</dt>
+                    <dt class="text-lg font-semibold text-gray-700">Дата рождения:</dt>
                     <dd class="mt-1 text-lg text-gray-900 sm:mt-0 sm:col-span-2"><%= formatDate(user.birthday) %></dd>
                 </div>
             </dl>
@@ -34,17 +32,17 @@
 
     <div class="mt-6 mb-6 bg-white shadow overflow-hidden sm:rounded-lg border-radius-20px border-2 border-purple-600">
         <div class="bg-purple-50 border-b-2 border-purple-600 px-4 py-5 sm:px-6">
-            <h3 class="text-2xl text-center font-semibold">История заказов</h3>
+            <h3 class="text-2xl text-center font-semibold">История поездок</h3>
         </div>
         <div class="border-t border-gray-200">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                 <tr>
                     <th scope="col" class="px-6 py-3 text-center text-lg font-semibold tracking-wider">
-                        № заказа
+                        №
                     </th>
                     <th scope="col" class="px-6 py-3 text-center text-lg font-semibold  tracking-wider">
-                        Дата и время заказа
+                        Время создания
                     </th>
                     <th scope="col" class="px-6 py-3 text-center text-lg font-semibold  tracking-wider">
                         Начальный пункт
