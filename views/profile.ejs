@@ -56,26 +56,27 @@
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                <% orders.forEach(function(order) { %>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-center font-semibold text-lg text-gray-700">
-                            <a href="/trip/<%= order.id%>"><%= order.id%></a>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap  text-center text-lg text-gray-900">
-                            <%= formatDate(order.time_create, true)  %>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
-                            <%= order.point_start %>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
-                            <%= order.point_final %>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
-                            <%= order.cost %> руб.
-                        </td>
-                    </tr>
-                <% }) %>
+                    <% orders.forEach(function(order) { %>
+                        <tr onclick="window.location='/trip/<%= order.id%>'"  class="table-row" style="cursor: pointer;">
+                            <td class="px-6 py-4 whitespace-nowrap text-center font-semibold text-lg text-gray-700">
+                                <span class="link_trip"><%= order.id%></span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                                <span class="link_trip"><%= formatDate(order.time_create, true)  %></span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                                <span class="link_trip"><%= order.point_start %></span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                                <span class="link_trip"><%= order.point_final %></span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                                <span class="link_trip"><%= order.cost %> руб.</span>
+                            </td>
+                        </tr>
+                    <% }) %>
                 </tbody>
+                
             </table>
         </div>
     </div>
