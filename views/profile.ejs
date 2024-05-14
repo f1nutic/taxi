@@ -2,6 +2,22 @@
 <head>
     <link rel="icon" href="img/favicon.png" type="image/x-icon">
     <title>Профиль</title>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* 100% высоты видимой области */
+        }
+
+        .container {
+            flex: 1; /* Занимает всю доступную высоту */
+        }
+
+        footer {
+            margin-top: auto; /* Футер будет прижат к низу видимой области */
+        }
+    </style>
 </head>
 <body>
 <%- include('header') %>
@@ -64,10 +80,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
                                 <span class="link_trip"><%= formatDate(order.time_create, true)  %></span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900" style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">
                                 <span class="link_trip"><%= order.point_start %></span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900" style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">
                                 <span class="link_trip"><%= order.point_final %></span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-lg text-gray-900">

@@ -10,7 +10,7 @@ router.post('/calculate-cost', (req, res) => {
     try {
         const { distance, distanceInKM ,duration, trafficScore } = req.body;
         let cost;
-        if (distanceInKM) {
+        if (distanceInKM==true) {
             // Расчёт стоимости, если КМ пришли
             cost = baseRate
                 + (costPerKm * distance)
@@ -18,8 +18,7 @@ router.post('/calculate-cost', (req, res) => {
                 + (trafficCoefficient * trafficScore * distance);
         } else {
             // Расчёт стоимости, если М пришли
-            cost = baseRate
-                + 20
+            cost = baseRate                
                 + (costPerMinute * duration)
                 + (trafficCoefficient * trafficScore);
         }
