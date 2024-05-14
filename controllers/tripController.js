@@ -68,7 +68,7 @@ exports.getTripById = async (req, res) => {
         
 
         if (!driver) {
-            return res.redirect(`/map?message=Водитель+не+найден&status=fail`);
+            return res.redirect(`/profile?message=Водитель+не+найден&status=fail`);
         }
         const car=await Car.findOne({
             where: {
@@ -77,7 +77,7 @@ exports.getTripById = async (req, res) => {
             }
         })
         if (!car) {
-            return res.redirect(`/map?message=Машина+не+найдена&status=fail`);
+            return res.redirect(`/profile?message=Машина+не+найдена&status=fail`);
         }
         console.log(trip.time_create);
 
