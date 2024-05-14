@@ -42,5 +42,5 @@ function init() {
         }
     } else {
         window.showNotification('Данные о маршруте не найдены.', 'fail');
-    }
+    }    
 }

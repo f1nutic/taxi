@@ -23,6 +23,15 @@
             <!--TODO-->
             <p>Создание поездки: <%= moment(trip.time_create).format('DD.MM.YYYY HH:mm:ss') %></p>
             <p>Стоимость: <%= trip.cost %> руб.</p>
+            
+        </div>
+        <p class="text-3xl my-4 text-center font-semibold">Информация о водителе:</p>
+        <div id="routeInfo" class="mx-12 my-8 text-xl">
+            <!--TODO-->            
+            <p>Имя водителя: <%= driver.name %> </p>            
+            <p>Цвет: <%= car.color %></p>
+            <p>Машина: <%= car.mark %> <%= car.model %> </p>
+            <p>Номер: <%= car.registration_number %> </p>
         </div>
     </div>
 </div>
@@ -32,6 +41,11 @@
     let startPoint = '<%= trip.point_start %>';
     let endPoint = '<%= trip.point_final %>';
     let routeData = '<%- JSON.stringify(trip.route_data) %>';
+    if (driver){
+        let driverIs=true;
+    }else{
+        let driverIs=false;
+    }
 </script>
 <script src="/trip.js"></script>
 
