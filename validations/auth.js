@@ -24,7 +24,11 @@ const validateRegistration = [
     body('password')
         .trim()
         .isLength({ min: 6 })
-        .withMessage('Пароль должен содержать минимум 6 символов'),
+        .withMessage('Пароль должен содержать минимум 6 символов')
+        .matches(/\d/)
+        .withMessage('Пароль должен содержать хотя бы одну цифру')
+        .matches(/[!@#$%^&*(),.?":{}|<>]/)
+        .withMessage('Пароль должен содержать хотя бы один специальный символ'),
 
     body('birthday')
         .trim()
