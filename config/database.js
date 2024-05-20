@@ -1,4 +1,7 @@
 const dbConnection = process.env.DATABASE_CONNECTION_STRING;
+if (!dbConnection) {
+    throw new Error('DATABASE_CONNECTION_STRING is not defined');
+}
 const Sequelize= require('sequelize');
 // Создание нового экземпляра Sequelize
 const sequelize = new Sequelize(dbConnection, {
