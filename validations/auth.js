@@ -6,7 +6,9 @@ const validateRegistration = [
     body('name')
         .trim()
         .isLength({ min: 2, max: 50 })
-        .withMessage('Имя может содержать от 2 до 50 символов'),
+        .withMessage('Имя может содержать от 2 до 50 символов')
+        .matches(/^[А-Яа-я]+$/)
+        .withMessage('Имя должно содержать только русские буквы'),
 
     body('phone')
         .trim()
