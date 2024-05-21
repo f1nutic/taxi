@@ -1,23 +1,27 @@
+require('dotenv').config();
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { Trip, User, sequelize } = require('../config/database');
 const tripController = require('../controllers/tripController');
 
-describe('Trip Controller - createOrder with validation', function () {
+describe('Проверка механизма создания поездки', function () {
     this.timeout(10000);
     let req, res;
+    let pointStart = 'Начальная точка';
+    let pointEnd = 'Конечная точка';
+    let costRoute = 100;
+    let routeData = 'some'
 
     beforeEach(() => {
-        // Подготовка запроса и ответа
         req = {
             body: {
-                point_start: 'Starting point',
-                point_final: 'Final destination',
-                cost: 100,
-                route_data: 'Route data',
+                point_start: pointStart,
+                point_final: pointEnd,
+                cost: costRoute,
+                route_data: routeData,
             },
             session: {
-                userId: 1, // Имитируем, что пользователь авторизован
+                userId: 1,
             },
         };
         res = {
@@ -26,16 +30,15 @@ describe('Trip Controller - createOrder with validation', function () {
             status: sinon.stub().returnsThis(),
         };
 
-        // Подменяем методы модели Trip и User
         sinon.stub(Trip, 'create').resolves({
             id: 1,
-            customer: 1,
+            customer: req.session.userId,
             driver: 2,
-            point_start: 'Starting point',
-            point_final: 'Final destination',
-            cost: 100,
+            point_start: pointStart,
+            point_final: pointEnd,
+            cost: costRoute,
             status: 1,
-            route_data: 'Route data',
+            route_data: routeData,
             time_create: new Date().toISOString(),
         });
 
@@ -48,34 +51,35 @@ describe('Trip Controller - createOrder with validation', function () {
     });
 
     afterEach(() => {
-        // Восстанавливаем оригинальные методы
         sinon.restore();
     });
 
-    it('should create a new trip with valid data', async function () {
-        // Вызываем метод создания поездки
-        await tripController.createOrder(req, res);
-
-        // Проверяем, что поездка была создана
-        expect(Trip.create.calledOnce).to.be.true;
-        const tripData = Trip.create.getCall(0).args[0];
-        expect(tripData.point_start).to.equal('Starting point');
-        expect(tripData.point_final).to.equal('Final destination');
-        expect(tripData.cost).to.equal(100);
-        expect(tripData.route_data).to.equal('Route data');
+    it('Создана поездка с верными данными', async function () {
+        try {
+            await tripController.createOrder(req, res);
+            expect(Trip.create.calledOnce).to.be.true;
+            const tripData = Trip.create.getCall(0).args[0];
+            expect(tripData.point_start).to.equal(pointStart);
+            expect(tripData.point_final).to.equal(pointEnd);
+            expect(tripData.cost).to.equal(costRoute);
+            expect(tripData.route_data).to.equal(routeData);
+            console.log('Создана поездка:')
+            console.log(tripData);
+        } catch (error) {
+            expect.fail(error.message);
+        }
     });
 
-    it('should handle errors and return a fail status', async function () {
-        // Устанавливаем некорректные данные для создания поездки
-        req.session.userId = null; // Удаляем userId для симуляции неавторизованного пользователя
-
+    it('Поездка не создана, так как пользователь не авторизирован', async function () {
+        req.session.userId = null;
         await tripController.createOrder(req, res);
-
-        // Проверяем, что была выполнена перенаправление
-        expect(res.redirect.calledOnce).to.be.true;
-        expect(res.redirect.getCall(0).args[0]).to.include('/login?message=Вы+не+авторизованы&status=fail');
-
-        // Проверяем, что поездка не была создана
-        expect(Trip.create.called).to.be.false;
+        try {
+            console.log(`Ответ: ${res.redirect.getCall(0).args[0]}`);
+            expect(res.redirect.getCall(0).args[0]).to.include('/login?message=Вы+не+авторизованы&status=fail');
+            expect(Trip.create.called).to.be.false;
+        } catch (error) {
+            console.log('ID пользователя: ' + req.session.userId)
+            expect.fail(error.message);
+        }
     });
 });

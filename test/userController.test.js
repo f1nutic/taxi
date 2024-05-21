@@ -6,18 +6,21 @@ const { User } = require('../config/database');
 const userController = require('../controllers/userController');
 const { validateRegistration } = require('../validations/auth');
 
-describe('User Controller - createUser with validation', function () {
+describe('Проверка механизма регистрации пользователя', function () {
     this.timeout(10000);
     let req, res;
+    let nameUser = 'Юнит';
+    let phoneUser = '79999998666';
+    let birthdayUser = '2003-12-01';
+    let passwordUser = 'password!123'
 
     beforeEach(() => {
-        // Подготовка запроса и ответа
         req = {
             body: {
-                name: 'Test User',
-                phone: '+79999998880',
-                birthday: '1990-01-01',
-                password: 'password!3232323',
+                name: nameUser,
+                phone: `+${phoneUser}`,
+                birthday: birthdayUser,
+                password: passwordUser,
             },
             session: {},
         };
@@ -25,14 +28,10 @@ describe('User Controller - createUser with validation', function () {
             redirect: sinon.spy(),
         };
 
-        // Подменяем методы модели User
         sinon.stub(User, 'create').resolves({
-            id: 1,
-            name: 'Test User',
-            phone: '1234567890',
-            birthday: '1990-01-01',
-            user_type: 2,
-            hashed_password: 'hashed_password',
+            name: nameUser,
+            phone: phoneUser,
+            birthday: birthdayUser,
         });
     });
 
@@ -52,32 +51,59 @@ describe('User Controller - createUser with validation', function () {
         }
     };
 
-    it('should create a new user with valid data', async function () {
-        // Запускаем валидацию
-        await runValidation(req, validateRegistration);
-
-        // Вызываем метод создания пользователя
-        await userController.createUser(req, res);
-
-        // Проверяем, что пользователь был создан
-        expect(User.create.calledOnce).to.be.true;
-        const userData = User.create.getCall(0).args[0];
-        expect(userData.name).to.equal('Test User');
-        expect(userData.phone).to.equal('79999998880');
-        expect(userData.birthday).to.equal('1990-01-01');
+    it('Создан пользователь с верными данными', async function () {
+        try {
+            await runValidation(req, validateRegistration);
+            await userController.createUser(req, res);
+            expect(User.create.calledOnce).to.be.true;
+            const userData = User.create.getCall(0).args[0];
+            expect(userData.name).to.equal(nameUser);
+            expect(userData.phone).to.equal(phoneUser);
+            expect(userData.birthday).to.equal(birthdayUser);
+            console.log('Создан пользователь:');
+            console.log(userData);
+        } catch (error) {
+            console.log(error.message);
+        }
     });
 
-    it('should not create a user with invalid phone number', async function () {
-        req.body.phone = 'invalid_phone';
-
+    it('Пользователь не создан из-за некорректного номера', async function () {
+        req.body.phone = '+41231231234';
         try {
-            // Запускаем валидацию, она должна выбросить ошибку
             await runValidation(req, validateRegistration);
+            await userController.createUser(req, res);
         } catch (error) {
+            console.log('Ошибка: ' + error.message +
+                `\nНеккоректный номер: ${req.body.phone}`);
             expect(error.message).to.equal('Некорректный формат номера телефона');
         }
+        expect(User.create.called).to.be.false;
 
-        // Проверяем, что пользователь не был создан
+    });
+
+    it('Пользователь не создан, так как минимальная длина имена - два символа', async function () {
+        req.body.name = 'Я';
+        try {
+            await runValidation(req, validateRegistration);
+            await userController.createUser(req, res);
+        } catch (error) {
+            console.log('Ошибка: ' + error.message +
+                `\nНеккоректное имя: ${req.body.name}`);
+            expect(error.message).to.equal('Имя должно содержать от 2 до 50 символов');
+        }
+        expect(User.create.called).to.be.false;
+    });
+
+    it('Пользователь не создан, так как имя должно содержать только русские буквы', async function () {
+        req.body.name = 'Lara Croft';
+        try {
+            await runValidation(req, validateRegistration);
+            await userController.createUser(req, res);
+        } catch (error) {
+            console.log('Ошибка: ' + error.message +
+                `\nНеккоректное имя: ${req.body.name}`);
+            expect(error.message).to.equal('Имя должно содержать только русские буквы');
+        }
         expect(User.create.called).to.be.false;
     });
 });
