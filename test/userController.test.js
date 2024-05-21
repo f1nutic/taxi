@@ -15,9 +15,9 @@ describe('User Controller - createUser with validation', function () {
         req = {
             body: {
                 name: 'Test User',
-                phone: '+79999998888',
+                phone: '+79999998880',
                 birthday: '1990-01-01',
-                password: 'password!',
+                password: 'password!3232323',
             },
             session: {},
         };
@@ -63,7 +63,7 @@ describe('User Controller - createUser with validation', function () {
         expect(User.create.calledOnce).to.be.true;
         const userData = User.create.getCall(0).args[0];
         expect(userData.name).to.equal('Test User');
-        expect(userData.phone).to.equal('1234567890');
+        expect(userData.phone).to.equal('79999998880');
         expect(userData.birthday).to.equal('1990-01-01');
     });
 
